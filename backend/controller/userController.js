@@ -37,7 +37,7 @@ const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
     res.status(400);
-    res.send("Please provide the email or password");
+    res.send("Please provide  email or password");
   }
   const userExist = await User.findOne({ email });
   const passwordCorrect = await userExist.matchPassword(password);

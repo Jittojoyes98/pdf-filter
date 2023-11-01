@@ -10,4 +10,4 @@ const {
 router.route("/").post(registerUser).get(protect, allPdf);
 router.route("/login").post(loginUser);
 
-module.exports = { router };
+module.exports = router;

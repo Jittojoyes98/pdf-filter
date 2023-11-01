@@ -8,15 +8,11 @@ export const PrivateRoute = () => {
   let user;
 
   async function readSession() {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-    // setSession(session)
-    user = session?.user;
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
-    if (user) {
+    if (userInfo) {
       console.log("Private route user here");
-      setCurrentUser(user);
+      setCurrentUser(userInfo);
     } else {
       console.log("No user found");
       navigate("/login");

@@ -11,12 +11,6 @@ const Authorize = ({ children }) => {
   const [session, setSession] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  if (!session) {
-    console.log("No supabase user");
-  } else {
-    console.log(session, "SESSION");
-    console.log("Supabase user exist");
-  }
   const value = {
     currentUser,
     setCurrentUser,
