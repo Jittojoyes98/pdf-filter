@@ -50,7 +50,7 @@ const loginUser = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(400);
-    throw new Error("Cannot create User");
+    throw new Error("User with these credentials don't exist");
   }
 });
 
@@ -61,4 +61,11 @@ const allPdf = asyncHandler(async (req, res) => {
   res.status(200).send(result);
 });
 
-module.exports = { loginUser, registerUser, allPdf };
+const uploadPdf = asyncHandler(async (req, res) => {
+  // const { userId } = req.body;
+  console.log(req.user);
+  console.log(req.file);
+  res.send({ message: "File uploaded succesfully" });
+});
+
+module.exports = { loginUser, registerUser, allPdf, uploadPdf };
