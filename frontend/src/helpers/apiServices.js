@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 export const loginUser = async ({ email, password }) => {
   const config = {
-    header: {
+    headers: {
       "Content-Type": "application/json",
     },
   };
@@ -22,16 +22,19 @@ export const loginUser = async ({ email, password }) => {
   }
 };
 export const fileUpload = async (file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  const token = getToken();
   const config = {
-    header: {
+    headers: {
       "Content-Type": "multipart/form-data",
-      Authorization: `Bearer ${getToken()}`,
+      authorization: "Bearer " + token,
     },
   };
   try {
     const { data } = await axios.post(
       "http://localhost:5000/api/user/upload",
-      file,
+      formData,
       config
     );
     console.log(data);
