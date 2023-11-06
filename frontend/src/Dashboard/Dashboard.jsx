@@ -1,20 +1,23 @@
 import React, { useState } from "react";
 import { fileUpload } from "../helpers/apiServices";
-import { showToast } from "../helpers/common";
+import useToast from "../hooks/useToast";
 
 const Dashboard = () => {
   const [files, setFiles] = useState(null);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const fileStatus = await fileUpload(files);
-    if (fileStatus) {
-      showToast("Uplaod successful");
-    } else {
-      showToast("Uplaod failed", "error");
-    }
+    await fileUpload(files);
   };
+
   const handleChange = (e) => {
-    console.log(e.target.files[0]);
+    // console.log(e.target.files[0]);
+    const file = e.target.files[0];
+    if (file.type != "application/pdf") {
+      e.target.value = null;
+      useToast("Please choose a pdf", "error");
+      return;
+    }
     setFiles(e.target.files[0]);
   };
   return (

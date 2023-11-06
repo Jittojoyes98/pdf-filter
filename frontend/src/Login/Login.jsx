@@ -5,7 +5,6 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { loginUser } from "../helpers/apiServices";
 import { useNavigate } from "react-router-dom";
-import { showToast } from "../helpers/common";
 
 const loginSchema = yup.object({
   email: yup
@@ -28,10 +27,7 @@ const LoginPage = () => {
     onSubmit: async (values) => {
       const loginResult = await loginUser(values);
       if (loginResult) {
-        showToast("Login successful");
         navigate("/dashboard");
-      } else {
-        showToast("Login failed", "error");
       }
     },
   });

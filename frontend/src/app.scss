@@ -1,3 +1,18 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .abc {
   color: red;
+}
+.toast-error {
+  background-color: red;
+}
+.toast-success {
+  background-color: rgb(106, 209, 106);
+}
+#toast-container {
+  width: 25%;
 }

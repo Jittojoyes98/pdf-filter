@@ -1,6 +1,6 @@
 import axios from "axios";
-import { getToken, showToast } from "./common";
-import { useNavigate } from "react-router-dom";
+import { getToken } from "./common";
+import useToast from "../hooks/useToast";
 
 export const loginUser = async ({ email, password }) => {
   const config = {
@@ -15,9 +15,11 @@ export const loginUser = async ({ email, password }) => {
       config
     );
     localStorage.setItem("userInfo", JSON.stringify(data));
+    useToast("Login successful");
     return true;
   } catch (error) {
     console.log(error?.response?.data?.message);
+    useToast(error?.response?.data?.message, "error");
     return false;
   }
 };
@@ -38,9 +40,11 @@ export const fileUpload = async (file) => {
       config
     );
     console.log(data);
+    useToast("Upload successful");
     return true;
   } catch (error) {
     console.log(error?.response?.data?.message);
+    useToast(error?.response?.data?.message, "error");
     return false;
   }
 };

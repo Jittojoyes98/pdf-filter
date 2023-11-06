@@ -62,7 +62,12 @@ const allPdf = asyncHandler(async (req, res) => {
 });
 
 const uploadPdf = asyncHandler(async (req, res) => {
-  // const { userId } = req.body;
+  const { mimetype } = req.user;
+  const array_of_allowed_file_types = ["application/pdf"];
+  if (!array_of_allowed_file_types.includes(mimetype)) {
+    res.status(400);
+    throw Error("Invalid file, please upload pdf format");
+  }
   console.log(req.user);
   console.log(req.file);
   res.send({ message: "File uploaded succesfully" });
