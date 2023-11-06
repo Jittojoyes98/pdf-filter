@@ -19,7 +19,12 @@ const UserModel = mongoose.Schema(
     },
     pdf: [
       {
-        type: String,
+        url: {
+          type: String,
+        },
+        id: {
+          type: mongoose.Schema.Types.ObjectId,
+        },
       },
     ],
     // pic: {

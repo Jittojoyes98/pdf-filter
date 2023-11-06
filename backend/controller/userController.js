@@ -57,20 +57,40 @@ const loginUser = asyncHandler(async (req, res) => {
 const allPdf = asyncHandler(async (req, res) => {
   // const { userId } = req.body;
   console.log(req.user);
-  const result = await User.findById(req.user).select("pdf");
+  const result = await User.findById(req.user._id).select("pdf");
   res.status(200).send(result);
 });
 
 const uploadPdf = asyncHandler(async (req, res) => {
-  const { mimetype } = req.user;
+  const { mimetype } = req.file;
   const array_of_allowed_file_types = ["application/pdf"];
+
   if (!array_of_allowed_file_types.includes(mimetype)) {
     res.status(400);
     throw Error("Invalid file, please upload pdf format");
   }
-  console.log(req.user);
-  console.log(req.file);
-  res.send({ message: "File uploaded succesfully" });
+
+  // console.log(req.user);
+  // console.log(req.file);
+
+  const fileUplaod = await User.findOneAndUpdate(
+    { _id: req.user._id },
+    {
+      $push: { pdf: { url: req.file.path } },
+      function(error, success) {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log(success);
+        }
+      },
+    }
+  );
+  if (fileUplaod) {
+    return res.send({ message: "File uploaded succesfully" });
+  }
+  res.status(400);
+  throw Error("File uploaded failed");
 });
 
 module.exports = { loginUser, registerUser, allPdf, uploadPdf };

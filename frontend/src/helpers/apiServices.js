@@ -23,6 +23,7 @@ export const loginUser = async ({ email, password }) => {
     return false;
   }
 };
+
 export const fileUpload = async (file) => {
   const formData = new FormData();
   formData.append("file", file);

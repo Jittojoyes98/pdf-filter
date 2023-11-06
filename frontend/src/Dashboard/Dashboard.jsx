@@ -11,13 +11,13 @@ const Dashboard = () => {
   };
 
   const handleChange = (e) => {
-    // console.log(e.target.files[0]);
+    console.log(e.target.files[0]);
     const file = e.target.files[0];
-    if (file.type != "application/pdf") {
-      e.target.value = null;
-      useToast("Please choose a pdf", "error");
-      return;
-    }
+    // if (file.type != "application/pdf") {
+    //   e.target.value = null;
+    //   useToast("Please choose a pdf", "error");
+    //   return;
+    // }
     setFiles(e.target.files[0]);
   };
   return (
