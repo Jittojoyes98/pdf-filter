@@ -1,23 +1,28 @@
 import React, { useState } from "react";
 import { fileUpload } from "../helpers/apiServices";
 import useToast from "../hooks/useToast";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const [files, setFiles] = useState(null);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await fileUpload(files);
+    const uploadStatus = await fileUpload(files);
+    if (uploadStatus) {
+      navigate("/editor");
+    }
   };
 
   const handleChange = (e) => {
     console.log(e.target.files[0]);
     const file = e.target.files[0];
-    // if (file.type != "application/pdf") {
-    //   e.target.value = null;
-    //   useToast("Please choose a pdf", "error");
-    //   return;
-    // }
+    if (file.type != "application/pdf") {
+      e.target.value = null;
+      useToast("Please choose a pdf", "error");
+      return;
+    }
     setFiles(e.target.files[0]);
   };
   return (

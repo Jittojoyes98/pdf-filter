@@ -28,7 +28,7 @@ const registerUser = asyncHandler(async (req, res) => {
       token: genarateToken(createUser.id),
     });
   } else {
-    res.status(400);
+    res.status(500);
     throw new Error("Cannot create User");
   }
 });
@@ -70,9 +70,6 @@ const uploadPdf = asyncHandler(async (req, res) => {
     throw Error("Invalid file, please upload pdf format");
   }
 
-  // console.log(req.user);
-  // console.log(req.file);
-
   const fileUplaod = await User.findOneAndUpdate(
     { _id: req.user._id },
     {
@@ -89,7 +86,7 @@ const uploadPdf = asyncHandler(async (req, res) => {
   if (fileUplaod) {
     return res.send({ message: "File uploaded succesfully" });
   }
-  res.status(400);
+  res.status(500);
   throw Error("File uploaded failed");
 });
 

@@ -8,9 +8,11 @@ const {
   uploadPdf,
 } = require("../controller/userController");
 const upload = require("../middleware/fileuploadMiddleware");
+const { fetchCurrentFile } = require("../controller/fileConroller");
 
 router.route("/").post(registerUser).get(protect, allPdf);
 router.route("/login").post(loginUser);
 router.route("/upload").post(protect, upload.single("file"), uploadPdf);
+router.route("/recentfile").get(protect, fetchCurrentFile);
 
 module.exports = router;

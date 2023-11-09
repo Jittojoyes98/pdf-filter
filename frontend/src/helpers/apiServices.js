@@ -49,3 +49,25 @@ export const fileUpload = async (file) => {
     return false;
   }
 };
+export const getCurrentFile = async () => {
+  const token = getToken();
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+      authorization: "Bearer " + token,
+    },
+  };
+  try {
+    const { data } = await axios.get(
+      "http://localhost:5000/api/user/recentfile",
+      config
+    );
+    console.log(data);
+    useToast("We got it");
+    return true;
+  } catch (error) {
+    console.log(error?.response?.data?.message);
+    useToast(error?.response?.data?.message, "error");
+    return false;
+  }
+};

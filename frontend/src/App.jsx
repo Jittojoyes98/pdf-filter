@@ -8,6 +8,7 @@ import HomePage from "./Home/Home";
 import LoginPage from "./Login/Login";
 import { PrivateRoute } from "./components/PrivateRoute";
 import SignupPage from "./Signup/Signup";
+import Editor from "./Editor/Editor";
 function App() {
   const [count, setCount] = useState(0);
 
@@ -34,12 +35,9 @@ function App() {
                 >
                   <Route index element={<Dashboard />} />
                 </Route>
-                {/* <Route
-                  path="/editor/:formid"
-                  element={<Layout layout="editor" />}
-                >
+                <Route path="/editor" element={<Layout layout="editor" />}>
                   <Route index element={<Editor />} />
-                </Route> */}
+                </Route>
               </Route>
             </Routes>
           </Authorize>
