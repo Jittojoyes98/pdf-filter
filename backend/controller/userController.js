@@ -69,11 +69,13 @@ const uploadPdf = asyncHandler(async (req, res) => {
     res.status(400);
     throw Error("Invalid file, please upload pdf format");
   }
+  let requireFilePath = req.file.path.split("/");
+  requireFilePath = requireFilePath.slice(1);
 
   const fileUplaod = await User.findOneAndUpdate(
     { _id: req.user._id },
     {
-      $push: { pdf: { url: req.file.path } },
+      $push: { pdf: { url: requireFilePath.join("/") } },
       function(error, success) {
         if (error) {
           console.log(error);

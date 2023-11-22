@@ -62,9 +62,13 @@ export const getCurrentFile = async () => {
       "http://localhost:5000/api/user/recentfile",
       config
     );
-    console.log(data);
+
+    // const res = await data.json();
+
     useToast("We got it");
-    return true;
+    console.log(data);
+
+    return data;
   } catch (error) {
     console.log(error?.response?.data?.message);
     useToast(error?.response?.data?.message, "error");
