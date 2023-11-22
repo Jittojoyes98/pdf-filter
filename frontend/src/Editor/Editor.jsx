@@ -45,7 +45,7 @@ const Editor = () => {
             Page {page} of {numPages}
           </p>
           <Button onClick={handleNext}>next</Button>
-          <Button onCanPlay={handlePrevious}>previous</Button>
+          <Button onClick={handlePrevious}>previous</Button>
         </>
       ) : (
         <>No data</>
