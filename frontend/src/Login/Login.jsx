@@ -1,10 +1,9 @@
 import React from "react";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { loginUser } from "../helpers/apiServices";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@chakra-ui/react";
 
 const loginSchema = yup.object({
   email: yup
@@ -39,7 +38,7 @@ const LoginPage = () => {
           <div className="label-wrapper">
             <label for="email">Email</label>
           </div>
-          <TextField
+          <input
             size="small"
             className="credential-field"
             value={formik.values.email}
@@ -58,7 +57,7 @@ const LoginPage = () => {
           <div className="label-wrapper">
             <label for="password">Password</label>
           </div>
-          <TextField
+          <input
             size="small"
             className="credential-field"
             value={formik.values.password}
@@ -76,7 +75,7 @@ const LoginPage = () => {
         </div>
         <Button
           style={{ marginTop: "25px" }}
-          variant="contained"
+          colorScheme="blue"
           type="submit"
           className="secondary-button auth-button"
         >

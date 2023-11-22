@@ -9,41 +9,44 @@ import LoginPage from "./Login/Login";
 import { PrivateRoute } from "./components/PrivateRoute";
 import SignupPage from "./Signup/Signup";
 import Editor from "./Editor/Editor";
+import { ChakraProvider } from "@chakra-ui/react";
 function App() {
   const [count, setCount] = useState(0);
 
   return (
-    <div className="app">
-      <BrowserRouter basename="/">
-        <Suspense>
-          <Authorize>
-            <Routes>
-              {/* add routes here */}
-              <Route path="/" element={<Layout layout="home" />}>
-                <Route index element={<HomePage />} />
-              </Route>
-              <Route path="/login" element={<Layout layout="login" />}>
-                <Route index element={<LoginPage />} />
-              </Route>
-              <Route path="/signup" element={<Layout layout="signup" />}>
-                <Route index element={<SignupPage />} />
-              </Route>
-              <Route element={<PrivateRoute />}>
-                <Route
-                  path="/dashboard"
-                  element={<Layout layout="dashboard" />}
-                >
-                  <Route index element={<Dashboard />} />
+    <ChakraProvider>
+      <div className="app">
+        <BrowserRouter basename="/">
+          <Suspense>
+            <Authorize>
+              <Routes>
+                {/* add routes here */}
+                <Route path="/" element={<Layout layout="home" />}>
+                  <Route index element={<HomePage />} />
                 </Route>
-                <Route path="/editor" element={<Layout layout="editor" />}>
-                  <Route index element={<Editor />} />
+                <Route path="/login" element={<Layout layout="login" />}>
+                  <Route index element={<LoginPage />} />
                 </Route>
-              </Route>
-            </Routes>
-          </Authorize>
-        </Suspense>
-      </BrowserRouter>
-    </div>
+                <Route path="/signup" element={<Layout layout="signup" />}>
+                  <Route index element={<SignupPage />} />
+                </Route>
+                <Route element={<PrivateRoute />}>
+                  <Route
+                    path="/dashboard"
+                    element={<Layout layout="dashboard" />}
+                  >
+                    <Route index element={<Dashboard />} />
+                  </Route>
+                  <Route path="/editor" element={<Layout layout="editor" />}>
+                    <Route index element={<Editor />} />
+                  </Route>
+                </Route>
+              </Routes>
+            </Authorize>
+          </Suspense>
+        </BrowserRouter>
+      </div>
+    </ChakraProvider>
   );
 }
 
