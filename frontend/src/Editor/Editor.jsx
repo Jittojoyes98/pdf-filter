@@ -1,5 +1,5 @@
 import React from "react";
-import { getCurrentFile } from "../helpers/apiServices";
+import { createFile, getCurrentFile } from "../helpers/apiServices";
 import { Document, Page, pdfjs } from "react-pdf";
 import { Button } from "@chakra-ui/react";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
@@ -9,10 +9,13 @@ const Editor = () => {
   const [pdfURL, setPdfURL] = React.useState();
   const [page, setPage] = React.useState(1);
   const [numPages, setNumPages] = React.useState(1);
+  const [selectPages, setSelectedPages] = React.useState([]);
+  const [highLighted, setHighlighted] = React.useState(false);
 
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
   };
+
   React.useEffect(() => {
     const getFileDetails = async () => {
       const fileDetails = await getCurrentFile();
@@ -20,6 +23,15 @@ const Editor = () => {
     };
     getFileDetails();
   }, []);
+
+  React.useEffect(() => {
+    if (selectPages.includes(page)) {
+      setHighlighted(true);
+      console.log("ADDED");
+    } else {
+      setHighlighted(false);
+    }
+  }, [page]);
 
   const handleNext = () => {
     if (page + 1 > numPages) {
@@ -34,19 +46,50 @@ const Editor = () => {
     setPage((page) => page - 1);
   };
 
+  const handleSelect = () => {
+    setHighlighted(!highLighted);
+    if (selectPages.includes(page)) {
+      setSelectedPages((pages) => pages.slice(0, pages.length - 1));
+      return;
+    }
+    setSelectedPages((pages) => [...pages, page]);
+  };
+
+  const handleSelectedPdf = () => {
+    const createFileSelected = async () => {
+      const createdFileDetails = await createFile({
+        pdfUrl: pdfURL,
+        pageNumbers: selectPages,
+      });
+    };
+    createFileSelected();
+  };
+
+  console.log(selectPages);
+
   return (
     <div>
       {pdfURL ? (
-        <>
+        <div>
+          <p
+            style={{ backgroundColor: `${highLighted ? "green" : "red"}` }}
+            onClick={handleSelect}
+          >
+            Selected
+          </p>
           <Document file={pdfURL} onLoadSuccess={onDocumentLoadSuccess}>
             <Page pageNumber={page} renderTextLayer={false} />
           </Document>
           <p>
             Page {page} of {numPages}
           </p>
-          <Button onClick={handleNext}>next</Button>
           <Button onClick={handlePrevious}>previous</Button>
-        </>
+
+          <Button onClick={handleNext}>next</Button>
+          <div>
+            <Button onClick={handleSelectedPdf}>Create</Button>
+          </div>
+        </div>
       ) : (
         <>No data</>
       )}

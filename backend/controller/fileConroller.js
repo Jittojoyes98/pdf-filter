@@ -26,7 +26,7 @@ const fetchCurrentFile = asyncHandler(async (req, res) => {
  */
 const createFile = asyncHandler(async (req, res) => {
   const { pdfUrl, pageNumbers } = req.body;
-  console.log(pdfUrl, pageNumbers);
+
   try {
     const response = await axios.get(pdfUrl, { responseType: "arraybuffer" });
 
@@ -35,31 +35,31 @@ const createFile = asyncHandler(async (req, res) => {
     const pdfDoc = await PDFDocument.load(pdfBytes);
 
     // Extract specified pages
-    const extractedPages = [];
-    for (const pageNumber of pageNumbers) {
-      const page = await pdfDoc.getPage(pageNumber - 1);
-      extractedPages.push(page);
-    }
-
-    // Create a new PDFDocument and add extracted pages in the specified order
     const newPdfDoc = await PDFDocument.create();
-    for (const page of extractedPages) {
-      const copiedPage = await newPdfDoc.addPage([
-        page.getWidth(),
-        page.getHeight(),
-      ]);
-      copiedPage.drawPage(page);
-    }
 
-    // Save the new PDF as bytes
+    // const extractedPages = [];
+    for (const pageNumber of pageNumbers) {
+      const [page] = await newPdfDoc.copyPages(pdfDoc, [pageNumber - 1]);
+      newPdfDoc.addPage(page);
+    }
+    console.log(newPdfDoc);
+
     const newPdfBytes = await newPdfDoc.save();
 
     res.contentType("application/pdf");
+    handleUint8ArrayUpload(newPdfBytes);
     res.send(newPdfBytes);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
+const handleUint8ArrayUpload = (pdfArray) => {
+  const pdfBuffer = Buffer.from(pdfArray);
+  // Process the pdfBuffer as needed
+  // ...
+  console.log("Uint8Array processed successfully");
+};
 
 module.exports = { fetchCurrentFile, createFile };
