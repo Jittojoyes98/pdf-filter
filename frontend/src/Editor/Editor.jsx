@@ -20,7 +20,9 @@ const Editor = () => {
   React.useEffect(() => {
     const getFileDetails = async () => {
       const fileDetails = await getCurrentFile();
-      setPdfURL(`http://localhost:5000/${fileDetails?.url}`);
+      if (fileDetails?.url) {
+        setPdfURL(`http://localhost:5000/${fileDetails?.url}`);
+      }
     };
     getFileDetails();
   }, []);

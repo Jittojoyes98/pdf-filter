@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import { fileUpload } from "../helpers/apiServices";
+import React from "react";
+import { currentUserPdfs, fileUpload } from "../helpers/apiServices";
 import useToast from "../hooks/useToast";
 import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
-  const [files, setFiles] = useState(null);
+  const [files, setFiles] = React.useState(null);
   const navigate = useNavigate();
+  const [pdfs, setPdfs] = React.useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,6 +26,17 @@ const Dashboard = () => {
     }
     setFiles(e.target.files[0]);
   };
+
+  React.useEffect(() => {
+    const getPdfs = async () => {
+      const result = await currentUserPdfs();
+      if (result.pdf.length > 0) {
+        setPdfs(result.pdf);
+      }
+    };
+    getPdfs();
+  }, []);
+
   return (
     <>
       <div>Dashboard</div>

@@ -1,6 +1,6 @@
 import toastr from "toastr";
 toastr.options = {
-  positionClass: "toast-top-center",
+  positionClass: "toast-top-right",
   hideDuration: 3000,
   timeOut: 5000,
   closeButton: true,
@@ -8,7 +8,7 @@ toastr.options = {
 
 const useToast = (message, type = "success") => {
   if (type == "error") {
-    toastr.error(message, "error");
+    toastr.error(message, "Error");
   } else {
     toastr.success(message, "Success");
   }

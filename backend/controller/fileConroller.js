@@ -3,8 +3,10 @@ const User = require("../models/UserModel");
 const axios = require("axios");
 const { PDFDocument } = require("pdf-lib");
 
-// @desc retrive the recently uploaded file
-// @route GET api/user/recentfile
+/**
+ * @description retrive the recently uploaded file
+ * @route GET api/user/recentfile
+ */
 const fetchCurrentFile = asyncHandler(async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.user._id });
@@ -94,7 +96,9 @@ const uploadPdf = asyncHandler(async (req, res) => {
 
 const handleUint8ArrayUpload = (pdfArray) => {
   const pdfBuffer = Buffer.from(pdfArray);
+  console.log(pdfBuffer, "HEEYEE");
   // Process the pdfBuffer as needed
+  // https://stackoverflow.com/questions/60664751/how-to-create-a-multer-file-from-an-image-url
   // ...
   console.log("Uint8Array processed successfully");
 };

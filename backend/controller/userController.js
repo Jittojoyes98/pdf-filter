@@ -60,8 +60,6 @@ const loginUser = asyncHandler(async (req, res) => {
  */
 
 const allPdf = asyncHandler(async (req, res) => {
-  // const { userId } = req.body;
-  console.log(req.user);
   const result = await User.findById(req.user._id).select("pdf");
   res.status(200).send(result);
 });
