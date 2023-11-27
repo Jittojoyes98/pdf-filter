@@ -2,6 +2,7 @@ import React from "react";
 import { createFile, getCurrentFile } from "../helpers/apiServices";
 import { Document, Page, pdfjs } from "react-pdf";
 import { Button } from "@chakra-ui/react";
+import useToast from "../hooks/useToast";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 // import "react-pdf/dist/esm/Page/TextLayer.css";
 
@@ -49,13 +50,19 @@ const Editor = () => {
   const handleSelect = () => {
     setHighlighted(!highLighted);
     if (selectPages.includes(page)) {
-      setSelectedPages((pages) => pages.slice(0, pages.length - 1));
+      let idx = selectPages.findIndex((val) => val == page);
+      var removed = selectPages.splice(idx, 1);
+      setSelectedPages(selectPages);
       return;
     }
     setSelectedPages((pages) => [...pages, page]);
   };
 
   const handleSelectedPdf = () => {
+    if (!selectPages.length) {
+      useToast("Please select atleast 1 page to proceed", "error");
+      return;
+    }
     const createFileSelected = async () => {
       const createdFileDetails = await createFile({
         pdfUrl: pdfURL,

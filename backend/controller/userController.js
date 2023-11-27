@@ -54,6 +54,11 @@ const loginUser = asyncHandler(async (req, res) => {
   }
 });
 
+/**
+ * @description to get all the paths of the pdf uploaded.
+ * @route POST  api/user/
+ */
+
 const allPdf = asyncHandler(async (req, res) => {
   // const { userId } = req.body;
   console.log(req.user);
@@ -61,35 +66,4 @@ const allPdf = asyncHandler(async (req, res) => {
   res.status(200).send(result);
 });
 
-const uploadPdf = asyncHandler(async (req, res) => {
-  const { mimetype } = req.file;
-  const array_of_allowed_file_types = ["application/pdf"];
-
-  if (!array_of_allowed_file_types.includes(mimetype)) {
-    res.status(400);
-    throw Error("Invalid file, please upload pdf format");
-  }
-  let requireFilePath = req.file.path.split("/");
-  requireFilePath = requireFilePath.slice(1);
-
-  const fileUplaod = await User.findOneAndUpdate(
-    { _id: req.user._id },
-    {
-      $push: { pdf: { url: requireFilePath.join("/") } },
-      function(error, success) {
-        if (error) {
-          console.log(error);
-        } else {
-          console.log(success);
-        }
-      },
-    }
-  );
-  if (fileUplaod) {
-    return res.send({ message: "File uploaded succesfully" });
-  }
-  res.status(500);
-  throw Error("File uploaded failed");
-});
-
-module.exports = { loginUser, registerUser, allPdf, uploadPdf };
+module.exports = { loginUser, registerUser, allPdf };

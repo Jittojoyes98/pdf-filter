@@ -42,9 +42,10 @@ const createFile = asyncHandler(async (req, res) => {
       const [page] = await newPdfDoc.copyPages(pdfDoc, [pageNumber - 1]);
       newPdfDoc.addPage(page);
     }
-    console.log(newPdfDoc);
 
     const newPdfBytes = await newPdfDoc.save();
+
+    console.log(newPdfBytes, "NEW DATA");
 
     res.contentType("application/pdf");
     handleUint8ArrayUpload(newPdfBytes);
@@ -55,6 +56,42 @@ const createFile = asyncHandler(async (req, res) => {
   }
 });
 
+/**
+ * @description to upload a file to db using its path , where multer is used as the middleware.
+ * @route POST  api/user/upload
+ */
+
+const uploadPdf = asyncHandler(async (req, res) => {
+  const { mimetype } = req.file;
+  const array_of_allowed_file_types = ["application/pdf"];
+
+  if (!array_of_allowed_file_types.includes(mimetype)) {
+    res.status(400);
+    throw Error("Invalid file, please upload pdf format");
+  }
+  let requireFilePath = req.file.path.split("/");
+  requireFilePath = requireFilePath.slice(1);
+
+  const fileUplaod = await User.findOneAndUpdate(
+    { _id: req.user._id },
+    {
+      $push: { pdf: { url: requireFilePath.join("/") } },
+      function(error, success) {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log(success);
+        }
+      },
+    }
+  );
+  if (fileUplaod) {
+    return res.send({ message: "File uploaded succesfully" });
+  }
+  res.status(500);
+  throw Error("File uploaded failed");
+});
+
 const handleUint8ArrayUpload = (pdfArray) => {
   const pdfBuffer = Buffer.from(pdfArray);
   // Process the pdfBuffer as needed
@@ -62,4 +99,4 @@ const handleUint8ArrayUpload = (pdfArray) => {
   console.log("Uint8Array processed successfully");
 };
 
-module.exports = { fetchCurrentFile, createFile };
+module.exports = { fetchCurrentFile, createFile, uploadPdf };
