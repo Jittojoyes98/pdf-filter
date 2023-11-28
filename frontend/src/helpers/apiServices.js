@@ -48,12 +48,12 @@ export const fileUpload = async (file) => {
   formData.append("file", file);
   const token = getToken();
   const config = {
-    onUploadProgress: (progressEvent) => console.log(progressEvent.loaded),
     headers: {
       "Content-Type": "multipart/form-data",
       authorization: "Bearer " + token,
     },
   };
+
   try {
     const { data } = await axios.post(
       "http://localhost:5000/api/user/upload",

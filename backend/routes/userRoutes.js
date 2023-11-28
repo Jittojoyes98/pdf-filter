@@ -16,9 +16,7 @@ const {
 
 router.route("/").post(registerUser).get(protect, allPdf);
 router.route("/login").post(loginUser);
-router
-  .route("/upload")
-  .post(protect, progressMiddleware, upload.single("file"), uploadPdf);
+router.route("/upload").post(protect, upload.single("file"), uploadPdf);
 router.route("/recentfile").get(protect, fetchCurrentFile);
 router.route("/createfile").post(protect, createFile);
 
