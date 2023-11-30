@@ -2,7 +2,7 @@ const asyncHandler = require("express-async-handler");
 const User = require("../models/UserModel");
 const axios = require("axios");
 const { PDFDocument } = require("pdf-lib");
-const { savePdf } = require("../services/savePdfService");
+const { savePdf, addUrl } = require("../services/savePdfService");
 
 /**
  * @description retrive the recently uploaded file
@@ -52,9 +52,14 @@ const createFile = asyncHandler(async (req, res) => {
 
     res.contentType("application/pdf");
 
-    savePdf(newPdfBytes, filePdfName);
+    const filePath = savePdf(newPdfBytes, filePdfName);
 
-    res.send(newPdfBytes);
+    const fileAdd = await addUrl(req.user._id, filePath);
+
+    if (fileAdd) {
+      return res.send({ message: "File created succesfully" });
+    }
+    res.status(500).send({ message: "File cannot be created" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Internal Server Error" });
@@ -91,37 +96,12 @@ const uploadPdf = asyncHandler(async (req, res) => {
       },
     }
   );
+
   if (fileUplaod) {
     return res.send({ message: "File uploaded succesfully" });
   }
   res.status(500);
   throw Error("File uploaded failed");
 });
-
-// const handleUploadToMulter = async (pdfArray, token) => {
-
-//   formData.append("file", pdfBuffer.toString("base64"));
-
-//   const config = {
-//     headers: {
-//       "Content-Type": "multipart/form-data",
-//       authorization: "Bearer " + token,
-//     },
-//   };
-
-//   try {
-//     const { data } = await axios.post("http://localhost:5000/api/user/upload", {
-//       formData,
-//       config,
-//     });
-//     console.log(data);
-//   } catch (error) {
-//     console.log(error, "ERROR WE GOT ");
-//   }
-
-//   // Process the pdfBuffer as needed
-//   // https://stackoverflow.com/questions/60664751/how-to-create-a-multer-file-from-an-image-url
-//   console.log("Uint8Array processed successfully");
-// };
 
 module.exports = { fetchCurrentFile, createFile, uploadPdf };
