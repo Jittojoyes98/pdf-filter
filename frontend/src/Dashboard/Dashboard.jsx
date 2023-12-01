@@ -2,6 +2,8 @@ import React from "react";
 import { currentUserPdfs, fileUpload } from "../helpers/apiServices";
 import useToast from "../hooks/useToast";
 import { useNavigate } from "react-router-dom";
+import Thumbnail from "./Thumbnail";
+import { Button } from "@chakra-ui/react";
 
 const Dashboard = () => {
   const [files, setFiles] = React.useState(null);
@@ -39,11 +41,21 @@ const Dashboard = () => {
 
   return (
     <>
-      <div>Dashboard</div>
-      <h1>Pdf upload</h1>
+      <h1>Your Documents</h1>
+
+      <div className="thumbnail-wrapper">
+        {pdfs?.map((pdf) => (
+          <Thumbnail
+            fileUrl={`http://localhost:5000/${pdf.url}`}
+            pageIndex={0}
+          />
+        ))}
+      </div>
+      <h1>Upload Your Documents</h1>
+
       <form onSubmit={handleSubmit}>
         <input type="file" name="file" required onChange={handleChange} />
-        <button type="submit">Upload</button>
+        <Button type="submit">Upload</Button>
       </form>
     </>
   );
