@@ -3,6 +3,8 @@ const asyncHandler = require("express-async-handler");
 const User = require("../models/UserModel");
 const { genarateToken } = require("../config/helper");
 
+const { getUserPdfs } = require("../services/usersPdf");
+
 const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
   if (!name || !email || !password) {
@@ -60,7 +62,7 @@ const loginUser = asyncHandler(async (req, res) => {
  */
 
 const allPdf = asyncHandler(async (req, res) => {
-  const result = await User.findById(req.user._id).select("pdf");
+  const result = await getUserPdfs(req.user._id);
   res.status(200).send(result);
 });
 

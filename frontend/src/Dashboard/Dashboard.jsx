@@ -48,6 +48,7 @@ const Dashboard = () => {
           <Thumbnail
             fileUrl={`http://localhost:5000/${pdf.url}`}
             pageIndex={0}
+            pdfId={pdf._id}
           />
         ))}
       </div>

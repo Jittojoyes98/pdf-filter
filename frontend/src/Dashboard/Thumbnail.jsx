@@ -5,7 +5,7 @@ import "@react-pdf-viewer/core/lib/styles/index.css";
 // import "@react-pdf-viewer/thumbnail/lib/styles/index.css";
 import pageThumbnailPlugin from "./ThumbnailPlugin";
 
-const Thumbnail = ({ fileUrl, pageIndex }) => {
+const Thumbnail = ({ fileUrl, pageIndex, pdfId }) => {
   const thumbnailPluginInstance = thumbnailPlugin({ thumbnailWidth: 150 });
   const { Cover } = thumbnailPluginInstance;
   const pageThumbnailPluginInstance = pageThumbnailPlugin({
@@ -14,11 +14,17 @@ const Thumbnail = ({ fileUrl, pageIndex }) => {
     }),
   });
 
+  const handleOpenPdf = () => {
+    console.log(pdfId);
+  };
+
   return (
-    <Viewer
-      fileUrl={fileUrl}
-      plugins={[pageThumbnailPluginInstance, thumbnailPluginInstance]}
-    />
+    <div className="thumbnail-wrapper" onClick={handleOpenPdf}>
+      <Viewer
+        fileUrl={fileUrl}
+        plugins={[pageThumbnailPluginInstance, thumbnailPluginInstance]}
+      />
+    </div>
   );
 };
 

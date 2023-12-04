@@ -3,6 +3,7 @@ const User = require("../models/UserModel");
 const axios = require("axios");
 const { PDFDocument } = require("pdf-lib");
 const { savePdf, addUrl } = require("../services/savePdfService");
+const { getUserPdfs } = require("../services/usersPdf");
 
 /**
  * @description retrive the recently uploaded file
@@ -104,4 +105,26 @@ const uploadPdf = asyncHandler(async (req, res) => {
   throw Error("File uploaded failed");
 });
 
-module.exports = { fetchCurrentFile, createFile, uploadPdf };
+const getFileById = asyncHandler(async (req, res) => {
+  const { fileId } = req.body;
+  if (!fileId) {
+    res.status(400);
+    throw Error("Please specify the fileId");
+  }
+
+  try {
+    const pdfs = await getUserPdfs(req.user._id);
+
+    const pdfDetails = pdfs.pdf.filter((pdf) => pdf._id.toString() === fileId);
+    if (!pdfDetails.length) {
+      res.status(400);
+      throw Error("The file with this id doesn't exist");
+    }
+    return res.send({ pdf: pdfDetails[0] });
+  } catch (error) {
+    res.status(500);
+    throw Error("Internal server error");
+  }
+});
+
+module.exports = { fetchCurrentFile, createFile, uploadPdf, getFileById };
